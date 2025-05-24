@@ -1,7 +1,7 @@
 {
-    "name": "@codecrafters/build-your-own-git",
+    "name": "build-your-own-git",
     "version": "1.0.0",
-    "description": "Build your own Git challenge, from CodeCrafters",
+    "description": "Build your own Git",
     "main": "main.js",
     "scripts": {
         "dev": "node app/main.js"

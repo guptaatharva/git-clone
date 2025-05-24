@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const zlib = require('node:zlib')
-const GitClient = require('./git/commands/client')
-const CatFileCommand = require('./git/commands/cat-file')
+const GitClient = require('./git/client')
+const {CatFileCommand, HashObjectCommand} = require('./git/commands')
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 console.error("Logs from your program will appear here!");
@@ -11,14 +11,17 @@ const gitClient = new GitClient()
 const command = process.argv[2];
 
 switch (command) {
-  case "init":
-    createGitDirectory();
-    break;
-  case "cat-file" :
-    handleCatFileCommand()
-    break;
-  default:
-    throw new Error(`Unknown command ${command}`);
+    case "init":
+        createGitDirectory();
+        break;
+    case "cat-file" :
+        handleCatFileCommand()
+        break;
+    case "hash-object" :
+        handleHashObjectCommand()
+        break;
+    default:
+        throw new Error(`Unknown command ${command}`);
 }
 
 function createGitDirectory() {
@@ -35,5 +38,18 @@ function handleCatFileCommand () {
     const commitSHA = process.argv[4]
 
     const command = new CatFileCommand(flag , commitSHA)
-    gitClient.run (command)
+    gitClient.run(command)
+}
+
+function handleHashObjectCommand() {
+    let flag = process.argv[3]
+    let filepath = process.argv[4]
+
+    if (!filepath) {
+        filepath = flag
+        flag = null
+    }
+
+    const command = new HashObjectCommand(flag , filepath)
+    gitClient.run(command)
 }
